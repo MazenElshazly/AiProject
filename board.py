@@ -14,12 +14,32 @@ class Board:
         ]
 
     def print_grid(self):
-        for row in range(self.size):
-            for col in range(self.size):
-                 print(self.grid[row][col],end = "  ")
-            print()
+        # Print column indices at top
+        print("   ", end="")
+        for col in range(self.size):
+            print(f"{col:2} ", end="")
+        print()
 
-    def initBoard(self):
+        # Print top border
+        print("  ┌" + "───" * self.size + "┐")
+
+        # Print rows with row indices
+        for row in range(self.size):
+            print(f"{row:2}│", end="")  # Row index
+            for col in range(self.size):
+                print(f" {self.grid[row][col]:2}", end="")
+            print(" │")
+
+        # Print bottom border
+        print("  └" + "───" * self.size + "┘")
+
+        # Print column indices at bottom
+        print("   ", end="")
+        for col in range(self.size):
+            print(f"{col:2} ", end="")
+        print()
+
+    def init_board(self):
         cx, cy = self.center
 
         # el king
@@ -64,9 +84,76 @@ class Board:
             self.grid[cx + dr][cy - tip_of_attack] = "A"
 
 
+    #Move helpers
+
+    def is_in_bounds(self, row, col):
+        return (0 <= row and row < self.size) and (0 <= col and col < self.size)
+
+    def check_straight(self, old_row, old_col, new_row, new_col):
+        return (old_row == new_row ) or (old_col == new_col)
+
+    def check_empty_path(self, old_row, old_col, new_row, new_col):
+        if old_col == new_col:  # move up or down
+            start = min(old_row, new_row)
+            end = max(old_row, new_row)
+            for row in range(start, end + 1):
+                if row == old_row:  # skip starting position
+                    continue
+                if self.grid[row][new_col] != "x":  # Path is blocked
+                    return False
+            return True
+
+        else:  # move right or left
+            start = min(old_col, new_col)
+            end = max(old_col, new_col)
+            for col in range(start, end + 1):
+                if col == old_col:  # skip starting position
+                    continue
+                if self.grid[old_row][col] != "x":  # Path is blocked
+                    return False
+            return True
+
+    def move (self, old_row, old_col, new_row, new_col, piece_type):
+        if self.grid[new_row][new_col] == "x" :
+            if self.grid[old_row][old_col] == piece_type:
+                if self.is_in_bounds(new_row, new_col)  :
+                    if self.check_straight(old_row, old_col, new_row, new_col):
+                        if self.check_empty_path(old_row, old_col, new_row, new_col):
+                            self.grid[new_row][new_col] = piece_type
+                            self.grid[old_row][old_col] = "x"
+                            return True
+                        else:
+                            print("opponent in your Path!")
+                            return False
+                    else:
+                        print("cannot move diagonally!")
+                        return False
+                else:
+                    print("out of bounds!")
+                    return False
+            else:
+                print("not your piece to move!")
+                return False
+        else:
+            print("place not Empty!")
+            return False
+
+
+
 
 
 
 board = Board(9)
-board.initBoard()
+board.init_board()
+board.print_grid()
+# board.grid[0][1]="z"
+# print(board.grid[0][1])
+print(""
+      ""
+      ""
+      "")
+if not board.move(0, 2, 1, 2, piece_type="A"):
+    print("illegal move")
+else:
+    print("legal move")
 board.print_grid()
