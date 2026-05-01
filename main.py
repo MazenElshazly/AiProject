@@ -1,10 +1,8 @@
+size = 9
+grid = [[0] * size for _ in range(size)]
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+# Now you can access any cell
+grid[0][0] = 42
+grid[8][8] = 100
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
+print(grid[8][8])  # 100
