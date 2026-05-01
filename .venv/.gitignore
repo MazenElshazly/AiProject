@@ -1,0 +1,14 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# PyCharm specific
+.idea/
+# (If you want to share some IDE settings, ignore everything BUT the specifics)
+# However, for solo or simple projects, ignoring all of .idea/ is common.
