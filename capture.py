@@ -1,5 +1,7 @@
 from board import Board
 def _is_anvil(board, far_r, far_c, capturing_side):
+    if not board.is_in_bounds(far_r, far_c):  # add this
+        return False
     if (far_r, far_c) == tuple(board.center) or (far_r, far_c) in board.corners:
         return True
     if capturing_side == "A" and board.grid[far_r][far_c] == "A":
@@ -7,6 +9,8 @@ def _is_anvil(board, far_r, far_c, capturing_side):
     if capturing_side == "D" and board.grid[far_r][far_c] == "D":
         return True
     return False
+
+
 
 def _custodial_captures(board, moved_to, capturing_side):
     tr, tc = moved_to
@@ -24,6 +28,8 @@ def _custodial_captures(board, moved_to, capturing_side):
         if _is_anvil(board, far_r, far_c, capturing_side):
             to_remove.append((nr, nc))
     return to_remove
+
+
 
 def king_captured(board):
     king_pos = None
@@ -45,6 +51,8 @@ def king_captured(board):
             return False
     return True
 
+
+
 def check_winner(board):
     king_pos = None
     for r in range(board.size):
@@ -61,3 +69,13 @@ def check_winner(board):
     if king_captured(board):
         return 'attacker'
     return None
+
+
+def apply_captures(board, moved_to, capturing_side):
+    victims = _custodial_captures(board, moved_to, capturing_side)
+    for vr, vc in victims:
+        board.grid[vr][vc] = "x"
+
+    if capturing_side == "A" and king_captured(board):
+        return True
+    return False
