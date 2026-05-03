@@ -7,6 +7,7 @@ from controller import (
     get_human_move,
     get_computer_move,
     get_legal_moves,
+    choose_board_size,
 )
 
 
@@ -42,7 +43,7 @@ def run_game():
     print("=" * 52)
 
     # ── Setup ──────────────────────────────────────────────
-    board_size = 9          # change to 11 for larger board
+    board_size = choose_board_size()
     board = Board(board_size)
     board.init_board()
 

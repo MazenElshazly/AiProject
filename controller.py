@@ -42,6 +42,20 @@ def choose_human_side():
         print("  Enter 1 or 2.")
 
 
+def choose_board_size():
+    """
+    Ask the player to choose the board size.
+    Returns 9 or 11.
+    """
+    print("\n  Choose board size:")
+    print("    1. 9x9")
+    print("    2. 11x11")
+    while True:
+        c = input("  >> ").strip()
+        if c == '1': return 9
+        if c == '2': return 11
+        print("  Enter 1 or 2.")
+
 # ─────────────────────────────────────────────────────────────
 #  MOVE GENERATION  (legal moves for a given side)
 # ─────────────────────────────────────────────────────────────
