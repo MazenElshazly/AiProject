@@ -164,25 +164,16 @@ def get_legal_moves(board, player):
     return moves
 
 
+boardSize = int(input("Enter board size: (9x9 or 11x11)\n"))
 
-# THIS IS NOT FINISHED UNTIL THIS MOMENT
-#
-#
-# ONLY CORNER AND THRONE VALIDATION MISSING
-
-# EVERYTHING ELSE SHOULD WORK
-
-board = Board(9)
+while boardSize != 9 and boardSize != 11:
+    boardSize = int(input("Enter board size: (9x9 or 11x11)\n"))
+board = Board(boardSize)
 board.init_board()
 board.print_grid()
-# board.grid[0][1]="z"
-# print(board.grid[0][1])
 print(""
       ""
       ""
       "")
-if not board.move(0, 2, 1, 2, piece_type="A"):
-    print("illegal move")
-else:
-    print("legal move")
+
 board.print_grid()

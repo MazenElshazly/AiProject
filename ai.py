@@ -16,14 +16,14 @@ def evaluate(board, aiPlayer):
     winner = check_winner(board)
     if winner == 'attacker':
         if aiPlayer == 'A':
-            return 10000
+            return WIN_SCORE
         else:
-            return -10000
+            return -WIN_SCORE
     if winner == 'defender':
         if aiPlayer == 'D':
-            return 10000
+            return WIN_SCORE
         else:
-            return -10000
+            return -WIN_SCORE
 
     score = 0
     attackerCount = sum(row.count("A") for row in board.grid)
@@ -46,7 +46,6 @@ def evaluate(board, aiPlayer):
     if kingPosition is not None:
         corners = [(0, 0), (0, board.size - 1), (board.size - 1, 0), (board.size - 1, board.size - 1)]
         nearestCorner = min(corners, key=lambda c: abs(kingPosition[0] - c[0]) + abs(kingPosition[1] - c[1]))
-        minDistance = abs(kingPosition[0] - nearestCorner[0]) + abs(kingPosition[1] - nearestCorner[1])
         manhattanDistance = abs(kingPosition[0] - nearestCorner[0]) + abs(kingPosition[1] - nearestCorner[1])
         if aiPlayer == "D":
             score -= (manhattanDistance * KING_DISTANCE_WEIGHT)

@@ -62,12 +62,12 @@ def check_winner(board):
                 break
         if king_pos:
             break
+    if king_captured(board):
+        return 'attacker'
     if king_pos is None:
         return 'attacker'
     if king_pos in board.corners:
         return 'defender'
-    if king_captured(board):
-        return 'attacker'
     return None
 
 
