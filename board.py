@@ -139,6 +139,29 @@ class Board:
             return False
 
 
+def get_legal_moves(board, player):
+    pieces = ["A"] if player == "A" else ["D", "K"]
+    moves = []
+
+    for r in range(board.size):
+        for c in range(board.size):
+            if board.grid[r][c] not in pieces:
+                continue
+
+            # Try all four directions, walking until blocked
+            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                for steps in range(1, board.size):
+                    nr, nc = r + dr * steps, c + dc * steps
+
+                    if not board.is_in_bounds(nr, nc):
+                        break  # hit the edge
+
+                    if board.grid[nr][nc] != "x":
+                        break  # blocked by a piece
+
+                    moves.append(((r, c), (nr, nc)))
+
+    return moves
 
 
 
