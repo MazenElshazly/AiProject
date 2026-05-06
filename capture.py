@@ -76,6 +76,7 @@ def apply_captures(board, moved_to, capturing_side):
     for vr, vc in victims:
         board.grid[vr][vc] = "x"
 
+    is_king_captured = False
     if capturing_side == "A" and king_captured(board):
-        return True
-    return False
+        is_king_captured = True
+    return is_king_captured, victims

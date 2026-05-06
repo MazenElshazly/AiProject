@@ -100,7 +100,7 @@ def run_game():
             continue   # don't switch turns, ask again
 
         # 5. Apply captures (modifies board.grid in-place, returns bool)
-        king_captured = apply_captures(board, (tr, tc), current)
+        king_captured, victims = apply_captures(board, (tr, tc), current)
         if king_captured:
             board.print_grid()
             _announce_winner('attacker', human_side)

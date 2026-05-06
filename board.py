@@ -114,11 +114,19 @@ class Board:
             return True
 
     def move (self, old_row, old_col, new_row, new_col, piece_type):
+        if piece_type == "A" and (new_row, new_col) in self.corners:
+            print("Attackers cannot move to the corners!")
+            return False
+
         if self.grid[new_row][new_col] == "x" :
             if self.grid[old_row][old_col] == piece_type:
                 if self.is_in_bounds(new_row, new_col)  :
                     if self.check_straight(old_row, old_col, new_row, new_col):
                         if self.check_empty_path(old_row, old_col, new_row, new_col):
+                            if is_suicide_move(self, old_row, old_col, new_row, new_col, piece_type):
+                                print("Cannot move into a captured state (suicide)!")
+                                return False
+                            
                             self.grid[new_row][new_col] = piece_type
                             self.grid[old_row][old_col] = "x"
                             return True
@@ -137,6 +145,31 @@ class Board:
         else:
             print("place not Empty!")
             return False
+
+
+def is_suicide_move(board, r, c, nr, nc, piece):
+    from capture import _is_anvil
+    
+    # Temporarily apply move
+    old_val = board.grid[r][c]
+    board.grid[r][c] = "x"
+    board.grid[nr][nc] = piece
+    
+    enemy_side = "D" if piece == "A" else "A"
+    sandwiched = False
+    
+    if piece in ["A", "D"]:
+        # check horizontal
+        if _is_anvil(board, nr, nc - 1, enemy_side) and _is_anvil(board, nr, nc + 1, enemy_side):
+            sandwiched = True
+        # check vertical
+        elif _is_anvil(board, nr - 1, nc, enemy_side) and _is_anvil(board, nr + 1, nc, enemy_side):
+            sandwiched = True
+
+    # restore
+    board.grid[r][c] = old_val
+    board.grid[nr][nc] = "x"
+    return sandwiched
 
 
 def get_legal_moves(board, player):
@@ -158,6 +191,15 @@ def get_legal_moves(board, player):
 
                     if board.grid[nr][nc] != "x":
                         break  # blocked by a piece
+
+                    if board.grid[r][c] == "A" and (nr, nc) in board.corners:
+                        break  # Attackers cannot occupy corners
+                        
+                    if is_suicide_move(board, r, c, nr, nc, board.grid[r][c]):
+                        # Cannot move into suicide, but maybe we can walk PAST it?
+                        # No, you CAN walk past a sandwich! A sandwich only matters where you LAND.
+                        # So we don't break the loop, just don't add this move.
+                        continue
 
                     moves.append(((r, c), (nr, nc)))
 
